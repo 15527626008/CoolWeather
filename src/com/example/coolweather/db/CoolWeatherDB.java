@@ -1,9 +1,8 @@
-package com.example.coolweather.entity;
+package com.example.coolweather.db;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.coolweather.db.CoolWeatherOpenHelper;
 import com.example.coolweather.model.City;
 import com.example.coolweather.model.County;
 import com.example.coolweather.model.Province;
@@ -11,7 +10,6 @@ import com.example.coolweather.model.Province;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorJoiner.Result;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -69,205 +67,202 @@ public class CoolWeatherDB {
 	 * 存信息
 	 */
 	public Boolean saveProvince(Province province) {
-		
+
 		boolean result = false;
-		
+
 		if (province != null) {
-			
+
 			ContentValues cValues = new ContentValues();
-			
+
 			cValues.put("province_name", province.getProvince_name());
-			
+
 			cValues.put("province_code", province.getProvince_code());
-			
+
 			try {
-				
+
 				db.insert("Province", null, cValues);
-				
+
 				result = true;
-				
+
 			} catch (Exception e) {
-				
+
 				Log.e("TAG", "insert province error!");
 			}
 		}
-		
+
 		return result;
 	}
+
 	/**
 	 * 
 	 * @param city
 	 * @return
 	 */
-	public Boolean saveCity(City city){
+	public Boolean saveCity(City city) {
 		boolean result = false;
-		
-		if(city != null){
-			
+
+		if (city != null) {
+
 			ContentValues values = new ContentValues();
-			
+
 			values.put("city_name", city.getCity_name());
-			
+
 			values.put("city_code", city.getCity_code());
-			
+
 			values.put("province_id", city.getProvince_id());
-			
+
 			try {
-				
+
 				db.insert("City", null, values);
-				
+
 				result = true;
-				
+
 			} catch (Exception e) {
-				
+
 				Log.e("TAG", "insert city error!");
 			}
-			
+
 		}
 		return result;
 	}
+
 	/***
 	 * 
 	 * @param county
 	 */
-	public void saveCounty(County county){
+	public boolean saveCounty(County county) {
 		boolean result = false;
-		
-		if(county != null){
-			
+
+		if (county != null) {
+
 			ContentValues values = new ContentValues();
-			
+
 			values.put("county_name", county.getCounty_name());
-			
+
 			values.put("county_code", county.getCounty_code());
-			
+
 			values.put("city_id", county.getCity_id());
-			
+
 			try {
-				
+
 				db.insert("County", null, values);
-				
+
 				result = true;
-				
+
 			} catch (Exception e) {
-				
+
 				Log.e("TAG", "insert County error!");
 			}
-			
+
 		}
+
+		return result;
 	}
-	
+
 	/***
 	 * 获取信息
 	 */
-	public List<Province> getProvinces(){
-		
+	public List<Province> getProvinces() {
+
 		List<Province> provinces = new ArrayList<Province>();
-		
-		Cursor cursor = db.query("Province", null, null, null, null, null, null);
-		
-		if(cursor.moveToFirst()){
+
+		Cursor cursor = db
+				.query("Province", null, null, null, null, null, null);
+
+		if (cursor.moveToFirst()) {
 			do {
 				Province province = new Province();
-				
+
 				province.setId(cursor.getColumnIndex("id"));
-				
-				province.setProvince_name(cursor.getString(cursor.getColumnIndex("province_name")));
-				
-				province.setProvince_code(cursor.getString(cursor.getColumnIndex("province_code")));
-				
+
+				province.setProvince_name(cursor.getString(cursor
+						.getColumnIndex("province_name")));
+
+				province.setProvince_code(cursor.getString(cursor
+						.getColumnIndex("province_code")));
+
 				provinces.add(province);
-				
+
 			} while (cursor.moveToNext());
-			
+
 		}
-		
+
 		return provinces;
 	}
+
 	/***
 	 * 
 	 * @param provinceId
 	 * @return
 	 */
-	public List<City> getCities(Integer provinceId){
-		
-        List<City> citys = new ArrayList<City>();
-		
-		Cursor cursor = db.query("City", null, "province_id = ?", 
-				new String[]{String.valueOf(provinceId)}, 
-				null, null, null);
-		
-		if(cursor.moveToFirst()){
+	public List<City> getCities(Integer provinceId) {
+
+		List<City> citys = new ArrayList<City>();
+
+		Cursor cursor = db.query("City", null, "province_id = ?",
+				new String[] { String.valueOf(provinceId) }, null, null, null);
+
+		if (cursor.moveToFirst()) {
 			do {
-				
+
 				City city = new City();
-				
+
 				city.setId(cursor.getColumnIndex("id"));
-				
-				city.setCity_code(cursor.getString(cursor.getColumnIndex("city_code")));
-				
-				city.setCity_name(cursor.getString(cursor.getColumnIndex("city_name")));
-				
+
+				city.setCity_code(cursor.getString(cursor
+						.getColumnIndex("city_code")));
+
+				city.setCity_name(cursor.getString(cursor
+						.getColumnIndex("city_name")));
+
 				city.setProvince_id(provinceId);
-				
+
 				citys.add(city);
-				
+
 			} while (cursor.moveToNext());
-			
+
 		}
 		return citys;
 	}
+
 	/***
 	 * 
 	 * @param cityId
 	 * @return
 	 */
-	public List<County> getCountys(Integer cityId){
-		
+	public List<County> getCountys(Integer cityId) {
+
 		List<County> counties = new ArrayList<County>();
-		
-		Cursor cursor = db.query("County", null, "city_id = ?", 
-				new String[]{String.valueOf(cityId)}, null, null, null);
-		
-		if(cursor.moveToFirst()){
-			
+
+		Cursor cursor = db.query("County", null, "city_id = ?",
+				new String[] { String.valueOf(cityId) }, null, null, null);
+
+		if (cursor.moveToFirst()) {
+
 			do {
-				
+
 				County county = new County();
-				
+
 				county.setId(cursor.getColumnIndex("id"));
-				
-				county.setCounty_name(cursor.getString(cursor.getColumnIndex("county_name")));
-				
-				county.setCounty_code(cursor.getString(cursor.getColumnIndex("county_code")));
-				
+
+				county.setCounty_name(cursor.getString(cursor
+						.getColumnIndex("county_name")));
+
+				county.setCounty_code(cursor.getString(cursor
+						.getColumnIndex("county_code")));
+
 				county.setCity_id(cityId);
-				
+
 				counties.add(county);
-				
+
 			} while (cursor.moveToNext());
-			
+
 		}
-		
+
 		return counties;
 	}
+	
+	
+	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
