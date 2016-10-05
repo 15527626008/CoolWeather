@@ -224,6 +224,35 @@ public class CoolWeatherDB {
 		}
 		return citys;
 	}
+	
+	public List<City> getCities() {
+
+		List<City> citys = new ArrayList<City>();
+
+		Cursor cursor = db.query("City", null,null,
+				null, null, null, null);
+
+		if (cursor.moveToFirst()) {
+			do {
+
+				City city = new City();
+
+				city.setId(cursor.getColumnIndex("id"));
+
+				city.setCity_code(cursor.getString(cursor
+						.getColumnIndex("city_code")));
+
+				city.setCity_name(cursor.getString(cursor
+						.getColumnIndex("city_name")));
+
+				citys.add(city);
+
+			} while (cursor.moveToNext());
+
+		}
+		return citys;
+	}
+
 
 	/***
 	 * 
@@ -262,7 +291,38 @@ public class CoolWeatherDB {
 		return counties;
 	}
 	
+	public boolean haveDate(String TABLE_NAME){
+		
+		Cursor cursor = db.query(TABLE_NAME, null, null,
+				null, null, null, null);
+		
+		if(cursor.getCount() > 0)
+			return true;
+		return false;
+	}
 	
+	public City loadCityByCityName(String cityName){
+		
+		Cursor cursor = db.query("City", null, "city_name = ?",
+				new String[] { cityName}, null, null, null);
+		
+		if(cursor.moveToFirst()) {
+			
+			City city = new City();
+
+			city.setId(cursor.getColumnIndex("id"));
+
+			city.setCity_code(cursor.getString(cursor
+					.getColumnIndex("city_code")));
+
+			city.setCity_name(cityName);
+
+			return city;
+		}
+		
+		return null;
+		
+	}
 	
 
 }

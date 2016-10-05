@@ -1,5 +1,6 @@
 package com.example.coolweather.slideMenu;
 
+import android.R.integer;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -184,6 +185,27 @@ public class SlideMenu extends FrameLayout {
 			
 			invalidate();
 		}
+	}
+	
+	public void showOrHideMenu(){
+		
+		int scrollX = 0;
+		
+		if(getScrollX() == 0){
+			
+			scrollX = - menu.getMeasuredWidth();
+			
+			
+			
+		}else {
+			
+			scrollX = menu.getMeasuredWidth();
+			
+			
+		}
+		
+		scroller.startScroll(getScrollX(), 0, scrollX ,0,500);
+		invalidate();
 	}
 
 }

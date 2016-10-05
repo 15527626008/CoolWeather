@@ -5,11 +5,11 @@
     android:background="@color/light_blue" >
 
     <ImageView
-        android:id="@+id/topButton"
+        android:id="@+id/topimagebtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="4dp"
         android:layout_centerVertical="true"
+        android:layout_marginRight="4dp"
         android:src="@drawable/ic_top_bar_category" />
 
     <TextView
@@ -22,5 +22,15 @@
         android:textColor="@color/white"
         android:textSize="21sp"
         android:textStyle="bold" />
+
+    <ImageView 
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_action_refresh"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        />
 
 </RelativeLayout>
